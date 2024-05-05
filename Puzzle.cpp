@@ -6,15 +6,13 @@ bool Puzzle::solve(int option)
 {
 	int count = 0;
 	int frontierLength = 0;
-	// get the initial state of the problem
-	PuzzleState *initial = initial_state;
 
 	if (option == 3) {
 		cout << "OPTION 3\n";
 	// initialize the frontier with the initial state
 		priority_queue<PuzzleState*, vector<PuzzleState*>, Uniform> frontier;
 		vector<PuzzleState*> explored = {};
-		frontier.push(initial);
+		frontier.push(initial_state);
 
 		// while frontier isn't empty,
 		while (!frontier.empty())

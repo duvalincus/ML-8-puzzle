@@ -12,7 +12,7 @@ class Uniform
 {
 public:
 	bool operator()(PuzzleState* a, PuzzleState* b) {
-		return (a->g < b->g);
+		return (a->g > b->g);
 	}
 };
 

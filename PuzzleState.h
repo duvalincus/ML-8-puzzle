@@ -21,7 +21,7 @@ public:
         PuzzleState* currState = this;
         while (currState != nullptr)
         {
-            cout << *currState;
+            cout << *currState << endl;
             currState = currState->previous;
         }
     }
