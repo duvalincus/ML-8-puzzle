@@ -1,18 +1,37 @@
 #include <iostream>
-#include <functional>
 #include "PuzzleState.h"
 #include "Puzzle.h"
+#include <functional>
 #include <vector>
 
 using namespace std;
 
 Puzzle Create_Puzzle(int);
 void Menu();
+bool Euclidian(PuzzleState *a, PuzzleState *b)
+{
+    return (a->g + a->getEuclidianDistance()) > (b->g + b->getEuclidianDistance());
+}
+bool Uniform(PuzzleState *a, PuzzleState *b)
+{
+    return (a->g > b->g);
+}
+bool Misplaced(PuzzleState *a, PuzzleState *b)
+{
+    return a->getMisplaced() > b->getMisplaced();
+}
 
 int main()
 {
     // Puzzle Current_Puzzle = Create_Puzzle(9); // inital input
-    Puzzle Current_Puzzle(new PuzzleState({1,2,3,4,5,0,7,8,6}), new PuzzleState({1,2,3,4,5,6,7,8,0}));
+    vector<int> solved = {1,2,3,4,5,6,7,8,0};
+    vector<int> easy = {1,2,0,4,5,3,7,8,6};
+    vector<int> veryEasy = {1,2,3,4,5,6,7,0,8};
+    vector<int> doable = {0,1,2,4,5,3,7,8,6};
+    vector<int> ohBoy = {8, 7, 1, 6, 0, 2, 5, 4, 3};
+    vector<int> impossible = {1,2,3,4,5,6,8,7,0};
+
+    Puzzle Current_Puzzle(new PuzzleState(ohBoy), new PuzzleState(solved));
     //=====================start of menu=========================
     int userinput = 6;
     while (userinput != 0)
@@ -22,7 +41,7 @@ int main()
         if (userinput == 1)
         {
             cout << "Current Imputed Puzzle:\n";
-            cout << Current_Puzzle.initial_state; // Display current Puzzle
+            cout << *Current_Puzzle.initial_state; // Display current Puzzle
         }
         if (userinput == 2)
         {
@@ -31,17 +50,17 @@ int main()
         if (userinput == 3)
         {
             //Solve using Uniform cost
-            Current_Puzzle.solve(userinput);
+            Current_Puzzle.solve(Uniform, userinput);
         }
         if (userinput == 4)
         {
             // Solve using A* with the Misplaced Tile heuristic
-            Current_Puzzle.solve(userinput);
+            Current_Puzzle.solve(Misplaced, userinput);
         }
         if (userinput == 5)
         {
             // Solve using A* with the Euclidean Distance heuristic
-            Current_Puzzle.solve(userinput);
+            Current_Puzzle.solve(Euclidian, userinput);
         }
         if (userinput > 5 || userinput < 0)
         {

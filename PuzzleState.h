@@ -2,6 +2,7 @@
 #include <vector>
 #include <iostream>
 #include <cmath>
+#include <functional>
 using namespace std;
 
 class PuzzleState {

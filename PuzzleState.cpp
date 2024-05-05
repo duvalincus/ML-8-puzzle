@@ -8,61 +8,36 @@ using namespace std;
 // TODO fix euclidian distance problem
 double PuzzleState::getEuclidianDistance()
 {
-  vector<int> Goal_State;
-  int size = grid.size();
-  for (int i = 1; i < size; i++) {
-    Goal_State.push_back(i);
-  }
-  Goal_State.push_back(0);
-
-  // Calculate puzzle dimensions
-  int puzzle_size = static_cast<int>(sqrt(size));
-
-  // Display User_input elements and their positions
-  /*    cout << "User_input:" << endl;
-      for (int k = 0; k < User_input.size(); k++) {
-          int row = k / puzzle_size + 1;
-          int col = k % puzzle_size + 1;
-          cout << "Value: " << User_input[k] << ", Position: Row " << row << ",
-     Column " << col << endl;
-      }
-
-      cout << endl;
-  */
-  // Display Goal_State elements and their positions
-  /*   cout << "Goal_State:" << endl;
-     for (int k = 0; k < Goal_State.size(); k++) {
-         int row = k / puzzle_size + 1;
-         int col = k % puzzle_size + 1;
-         cout << "Value: " << Goal_State[k] << ", Position: Row " << row << ",
-     Column " << col << endl;
-     }
-
-     cout << endl;
- */
-  double TotalEU = 0;
-
-  // Calculate Euclidean distance for each pair of elements and add to TotalEU
-  for (int k = 0; k < grid.size(); k++) {
-	if (grid[k] != 0) {
-		int user_row = k / puzzle_size + 1;
-		int user_col = k % puzzle_size + 1;
-		int goal_index = find(Goal_State.begin(), Goal_State.end(), grid[k]) -
-						Goal_State.begin();
-		int goal_row = goal_index / puzzle_size + 1;
-		int goal_col = goal_index % puzzle_size + 1;
-		double distance =
-			sqrt(pow(goal_row - user_row, 2) + pow(goal_col - user_col, 2));
-		TotalEU += distance;
-		/*        cout << "Value: " << User_input[k] << ", Goal: " << Goal_State[k]
-					<< ", Euclidean Distance: " << distance << endl;
-		*/
+	vector<int> Goal_State;
+	int size = grid.size();
+	for (int i = 1; i < size; i++)
+	{
+		Goal_State.push_back(i);
 	}
-  }
+	Goal_State.push_back(0);
 
-  // Display the total Euclidean distance
-  //cout << "\nTotal Euclidean Distance: " << TotalEU << endl;
-return TotalEU;
+	// Calculate puzzle dimensions
+	int puzzle_size = static_cast<int>(sqrt(size));
+	double TotalEU = 0;
+
+	// Calculate Euclidean distance for each pair of elements and add to TotalEU
+	for (int k = 0; k < grid.size(); k++)
+	{
+		if (grid[k] != 0)
+		{
+			int user_row = k / puzzle_size + 1;
+			int user_col = k % puzzle_size + 1;
+			int goal_index = find(Goal_State.begin(), Goal_State.end(), grid[k]) -
+							 Goal_State.begin();
+			int goal_row = goal_index / puzzle_size + 1;
+			int goal_col = goal_index % puzzle_size + 1;
+			double distance =
+				sqrt(pow(goal_row - user_row, 2) + pow(goal_col - user_col, 2));
+			TotalEU += distance;
+		}
+	}
+
+	return TotalEU;
 };
 
 int PuzzleState::getMisplaced()
@@ -70,7 +45,7 @@ int PuzzleState::getMisplaced()
 	int distance = 0;
 	for (int i = 0; i < grid.size(); i++)
 	{
-		if (grid[i] != i)
+		if (grid[i] != i + 1)
 		{
 			distance++;
 		}
@@ -90,7 +65,7 @@ void PuzzleState::enumerate()
 	{
 		for (int j = 0; j < bound; j++)
 		{
-			if (grid[bound*i + j] == 0)
+			if (grid[bound * i + j] == 0)
 			{
 				row = i;
 				col = j;
