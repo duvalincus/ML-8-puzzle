@@ -1,20 +1,34 @@
 #include "PuzzleState.h"
-class Puzzle {
-  private:
-    PuzzleState initial_state, goal_state;
+class Euclidian
+{
+public:
+	bool operator()(PuzzleState* a, PuzzleState* b)
+	{
+		return (a->g + a->getEuclidianDistance()) > (b->g + b->getEuclidianDistance());
+	}
+};
 
-  public: 
-    Puzzle(PuzzleState initial, PuzzleState goal) 
-      : initial_state(initial), goal_state(goal) {}
-    enum operators {
-      left = -1, right = 1, up = -3, down = 3
-    };
-    int getEuclidianDistance(PuzzleState state);
-    int getMisplaced(PuzzleState state); 
-    PuzzleState getInitialState() {return initial_state;};
-    PuzzleState getGoalState() {return goal_state;};
+class Uniform
+{
+public:
+	bool operator()(PuzzleState* a, PuzzleState* b) {
+		return (a->g < b->g);
+	}
+};
 
+class Misplaced
+{
+public:
+	bool operator()(PuzzleState* a, PuzzleState* b) {
+		return a->getMisplaced() < b->getMisplaced();
+	}
+};
 
-
-    
+class Puzzle
+{
+public:
+	PuzzleState *initial_state, *goal_state;
+	Puzzle(PuzzleState* initial, PuzzleState* goal)
+		: initial_state(initial), goal_state(goal) {}
+	bool solve(int);
 };
