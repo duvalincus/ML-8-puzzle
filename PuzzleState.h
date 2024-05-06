@@ -2,6 +2,7 @@
 #include <vector>
 #include <iostream>
 #include <cmath>
+#include <stack>
 #include <functional>
 using namespace std;
 
