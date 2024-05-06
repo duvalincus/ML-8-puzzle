@@ -48,8 +48,8 @@ bool Puzzle::solve(std::function<bool(PuzzleState *, PuzzleState *)> func, int o
 
 		if (looking->grid == goal_state->grid)
 		{
-			std::cout << "Goal!\n";
 			looking->trace();
+			std::cout << "Goal!\n";
 			std::cout << "To solve this problem we expanded a total of " << count - 1 << " nodes\n";
 			std::cout << "The maximum number of nodes in the queue at one time: " << frontierLength << endl;
 			std::cout << "The depth of the goal node was " << looking->g << endl << endl;
