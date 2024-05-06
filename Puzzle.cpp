@@ -72,7 +72,7 @@ bool Puzzle::solve(std::function<bool(PuzzleState *, PuzzleState *)> func, int o
 		for (int i = 0; i < looking->nextStates.size(); i++)
 		{
 
-			if (explored.find(looking->nextStates[i]->grid) != explored.end()) 
+			if (explored.find(looking->nextStates[i]->grid) == explored.end()) 
 			{
 				frontier.push(looking->nextStates[i]);
 				explored.insert({looking->nextStates[i]->grid,looking->nextStates[i]});
