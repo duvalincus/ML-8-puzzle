@@ -19,12 +19,23 @@ public:
     int getMisplaced();
     void enumerate();
     void trace() {
-        PuzzleState* currState = this;
-        while (currState != nullptr)
-        {
-            cout << *currState << endl;
-            currState = currState->previous;
-        }
+    stack<PuzzleState*> stateStack;
+    PuzzleState* currState = this;
+
+    // Push all states onto the stack
+    while (currState != nullptr)
+    {
+        stateStack.push(currState);
+        currState = currState->previous;
+    }
+
+    // Pop states off the stack and print
+    while (!stateStack.empty())
+    {
+        currState = stateStack.top();
+        cout << *currState << endl;
+        stateStack.pop();
+    }
     }
 
     enum operators
