@@ -30,6 +30,7 @@ bool Puzzle::solve(std::function<bool(PuzzleState *, PuzzleState *)> func, int o
 {
 	int count = 0;
 	int frontierLength = 0;
+	PuzzleState* looking;
 
 	// initialize the frontier with the initial state
 	priority_queue<PuzzleState *, vector<PuzzleState *>, std::function<bool(PuzzleState *, PuzzleState *)>> frontier(func);
@@ -42,7 +43,7 @@ bool Puzzle::solve(std::function<bool(PuzzleState *, PuzzleState *)> func, int o
 		count++;
 		frontierLength = max(frontierLength, static_cast<int>(frontier.size()));
 		// remove optimal leaf node from frontier
-		PuzzleState *looking = frontier.top();
+		looking = frontier.top();
 		frontier.pop();
 
 		if (looking->grid == goal_state->grid)
@@ -71,7 +72,7 @@ bool Puzzle::solve(std::function<bool(PuzzleState *, PuzzleState *)> func, int o
 		for (int i = 0; i < looking->nextStates.size(); i++)
 		{
 
-			if (!explored.contains(looking->nextStates[i]->grid)) 
+			if (explored.find(looking->nextStates[i]->grid) != explored.end()) 
 			{
 				frontier.push(looking->nextStates[i]);
 				explored.insert({looking->nextStates[i]->grid,looking->nextStates[i]});
@@ -79,5 +80,8 @@ bool Puzzle::solve(std::function<bool(PuzzleState *, PuzzleState *)> func, int o
 		}
 	}
 	std::cout << "Did not find a solution :(";
+	std::cout << "To solve this problem we expanded a total of " << count - 1 << " nodes\n";
+	std::cout << "The maximum number of nodes in the queue at one time: " << frontierLength << endl;
+	std::cout << "The depth of the goal node was " << looking->g << endl << endl;
 	return false;
 }

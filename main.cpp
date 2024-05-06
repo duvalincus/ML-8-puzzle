@@ -31,7 +31,7 @@ int main()
     vector<int> ohBoy = {8, 7, 1, 6, 0, 2, 5, 4, 3};
     vector<int> impossible = {1,2,3,4,5,6,8,7,0};
 
-    Puzzle Current_Puzzle(new PuzzleState(ohBoy), new PuzzleState(solved));
+    Puzzle Current_Puzzle(new PuzzleState(impossible), new PuzzleState(solved));
     //=====================start of menu=========================
     int userinput = 6;
     while (userinput != 0)
