@@ -1,15 +1,30 @@
 #include "Puzzle.h"
 #include "PuzzleState.h"
 #include <queue>
+#include <unordered_map>
 
-bool checkFrontier(priority_queue<PuzzleState *, vector<PuzzleState *>, std::function<bool(PuzzleState *, PuzzleState *)>> frontier,
-					PuzzleState* check) {
-	while (!frontier.empty()) {
-		if (frontier.top()->grid == check->grid) return true;
-		frontier.pop();
-	}
-	return false;
+// using boost::hash_combine
+template <class T>
+inline void hash_combine(std::size_t &seed, T const &v)
+{
+	seed ^= std::hash<T>()(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
 }
+
+template <typename T>
+struct hash<vector<T>>
+{
+	typedef vector<T> argument_type;
+	typedef std::size_t result_type;
+	result_type operator()(argument_type const &in) const
+	{
+		size_t size = in.size();
+		size_t seed = 0;
+		for (size_t i = 0; i < size; i++)
+			// Combine the hash of the current vector with the hashes of the previous ones
+			hash_combine(seed, in[i]);
+		return seed;
+	}
+};
 
 bool Puzzle::solve(std::function<bool(PuzzleState *, PuzzleState *)> func, int option)
 {
@@ -18,7 +33,7 @@ bool Puzzle::solve(std::function<bool(PuzzleState *, PuzzleState *)> func, int o
 
 	// initialize the frontier with the initial state
 	priority_queue<PuzzleState *, vector<PuzzleState *>, std::function<bool(PuzzleState *, PuzzleState *)>> frontier(func);
-	vector<PuzzleState*> explored = {};
+	unordered_map<std::vector<int>, PuzzleState*, hash<vector<int>>> explored;
 	frontier.push(initial_state);
 
 	// while frontier isn't empty,
@@ -41,7 +56,7 @@ bool Puzzle::solve(std::function<bool(PuzzleState *, PuzzleState *)> func, int o
 		}
 
 		// add the node to the explored set
-		explored.push_back(looking);
+		explored.insert({looking->grid, looking});
 
 		// add looking's possible next states to nextStates
 		cout << "The best state to expand with g(n) = " << looking->g << endl;
@@ -56,9 +71,11 @@ bool Puzzle::solve(std::function<bool(PuzzleState *, PuzzleState *)> func, int o
 		for (int i = 0; i < looking->nextStates.size(); i++)
 		{
 
-			bool flag = false;
-			for (auto j : explored) if (j == looking->nextStates[i] || checkFrontier(frontier, looking)) flag = true;
-			if (!flag) frontier.push(looking->nextStates[i]);
+			if (!explored.contains(looking->nextStates[i]->grid)) 
+			{
+				frontier.push(looking->nextStates[i]);
+				explored.insert({looking->nextStates[i]->grid,looking->nextStates[i]});
+			}
 		}
 	}
 	std::cout << "Did not find a solution :(";
